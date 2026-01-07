@@ -8,6 +8,7 @@ import type { NextRequest } from "next/server";
 async function getStorageClient(): Promise<Storage> {
   // Use OIDC authentication on Vercel
   if (process.env.VERCEL) {
+    console.log(Object.keys(process.env));
     const projectId = process.env.GCP_PROJECT_ID;
     const projectNumber = process.env.GCP_PROJECT_NUMBER;
     const poolId = process.env.GCP_WORKLOAD_IDENTITY_POOL_ID;
@@ -50,6 +51,7 @@ async function getStorageClient(): Promise<Storage> {
       },
     });
 
+    console.log("authClient", authClient);
     if (!authClient) {
       throw new Error("Failed to create ExternalAccountClient");
     }
@@ -88,6 +90,7 @@ export async function GET(req: NextRequest) {
     }
 
     const storage = await getStorageClient();
+    console.log("storage", storage);
     const bucket = storage.bucket(bucketName);
     const randomFilename = `${crypto.randomBytes(5).toString("base64url")}-${file}`;
     const gcsFile = bucket.file(randomFilename);
