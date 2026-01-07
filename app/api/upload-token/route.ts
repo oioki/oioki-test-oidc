@@ -51,7 +51,11 @@ async function getStorageClient(): Promise<Storage> {
       },
     });
 
-    console.log("authClient", authClient);
+    console.log(
+      Object.fromEntries(
+        Object.entries(authClient as any).sort(([a], [b]) => a.localeCompare(b))
+      )
+    );
     if (!authClient) {
       throw new Error("Failed to create ExternalAccountClient");
     }
@@ -90,7 +94,11 @@ export async function GET(req: NextRequest) {
     }
 
     const storage = await getStorageClient();
-    console.log("storage", storage);
+    console.log(
+      Object.fromEntries(
+        Object.entries(storage as any).sort(([a], [b]) => a.localeCompare(b))
+      )
+    );
     const bucket = storage.bucket(bucketName);
     const randomFilename = `${crypto.randomBytes(5).toString("base64url")}-${file}`;
     const gcsFile = bucket.file(randomFilename);
